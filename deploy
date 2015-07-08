@@ -4,7 +4,7 @@ scp -r xctf_missle/ root@$HOST:/home/missle/
 scp erlang-17.5-1-x86_64.pkg.tar.xz root@$HOST:erlang175.pkg.tar.xz
 ssh root@$HOST "pacman -U erlang175.pkg.tar.xz --no-confirm"
 ssh root@$HOST "pacman -S mariadb socat --no-confirm"
-ssh root@$HOST "cd xctf_missle && make"
+ssh root@$HOST "cd /home/missle/xctf_missle && make"
 ssh root@$HOST "chown -R ctf:ctf /home/missle/xctf_missle"
 ssh root@$HOST "systemctl start mysqld"
 ROOTPWD=$(pwgen 50 | head -n 1)
@@ -23,6 +23,6 @@ scp set.sql root@$HOST:
 ssh root@$HOST "mysql -uroot < set.sql"
 ssh root@$HOST "systemctl restart mysqld"
 ssh root@$HOST "rm erlang175.pkg.tar.xz set.sql"
-ssh root@$HOST "cd xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release start"
+ssh root@$HOST "cd /home/missle/xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release start"
 sleep 10
-ssh root@$HOST "cd xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release ping"
+ssh root@$HOST "cd /home/missle/xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release ping"
