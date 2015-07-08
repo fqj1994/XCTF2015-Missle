@@ -13,7 +13,7 @@ websocket_info(timeout, Req, State) ->
 websocket_info(closed, Req, State) ->
     {shutdown, Req, State};
 websocket_info(Data, Req, State) ->
-    LogFile = code:priv_dir(xctf_missle) ++ "/missles.log",
+    LogFile = "/home/missle/missle.log",
     case Data of
         <<"Successfully destroyed target ", _/binary>> ->
             os:cmd("echo -n \"" ++ binary_to_list(Data) ++ "\" >> " ++ LogFile);
@@ -27,6 +27,10 @@ hexstring(Binary) when is_binary(Binary) ->
     list_to_binary(lists:flatten(lists:map(
                     fun(X) -> io_lib:format("~2.16.0b", [X]) end, 
                     binary_to_list(Binary)))).
+
+flag() ->
+    {ok, Flag} = file:read_file("/home/missle/flag"),
+    Flag.
 
 sha1(Input) ->
     hexstring(crypto:hash(sha, Input)).
@@ -71,7 +75,7 @@ websocket_handle({text, Data}, Req, State) ->
         true ->
             WSPid = self(),
             spawn(fun() ->
-                          {ok, ConnRef} = ssh:connect(binary_to_list(Host), Port, [{silently_accept_hosts, true}, {user, "root"}, {password, "123"}]),
+                          {ok, ConnRef} = ssh:connect(binary_to_list(Host), Port, [{silently_accept_hosts, true}, {user, "root"}, {password, binary_to_list(sha1(sha1(flag())))}]),
                           {ok, ChanId} = ssh_connection:session_channel(ConnRef, 2000),
                           success = ssh_connection:ptty_alloc(ConnRef, ChanId, [], 2000),
                           ssh_connection:shell(ConnRef, ChanId),
