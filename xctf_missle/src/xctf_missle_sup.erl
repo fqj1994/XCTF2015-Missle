@@ -14,5 +14,5 @@ init([]) ->
                                                  {[<<"/missle">>], ws_missle, []},
                                                  {[<<"/log">>], txt_log, []}
                                                ]}]),
-    cowboy:start_http(missleserv, 100, [{max_connections, 1024}, {port, 10001}], [{env, [{dispatch, URLDispatch}]}]),
+    cowboy:start_http(missleserv, 100, [{max_connections, 1024}, {port, 20001}], [{env, [{dispatch, URLDispatch}]}]),
 	{ok, {{one_for_one, 1, 5}, Procs}}.

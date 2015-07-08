@@ -23,3 +23,6 @@ scp set.sql root@$HOST:
 ssh root@$HOST "mysql -uroot < set.sql"
 ssh root@$HOST "systemctl restart mysqld"
 ssh root@$HOST "rm erlang175.pkg.tar.xz set.sql"
+ssh root@$HOST "cd xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release start"
+sleep 10
+ssh root@$HOST "cd xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release ping"
