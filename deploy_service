@@ -6,12 +6,14 @@ echo '' > /home/missle/flag
 chown root:missle /home/missle/flag
 chmod 740 /home/missle/flag
 cp -r xctf_missle /home/missle/
+touch /home/missle/missle.log
+chown missle /home/missle/missle.log
 chown -R ctf:ctf /home/missle/xctf_missle
 sudo -u ctf bash -c "cd /home/missle/xctf_missle; make"
 systemctl start mysqld
 ROOTPWD=$(pwgen 50 | head -n 1)
 ADMINPWD=$(pwgen 50 | head -n 1)
-ADMINPWDSHA=$(echo $ADMINPWD | sha1sum | awk '{print $1;}')
+ADMINPWDSHA=$(printf $ADMINPWD | sha1sum | awk '{print $1;}')
 echo "
 UPDATE mysql.user set password = password('$ROOTPWD');
 create database missles;

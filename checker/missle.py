@@ -8,11 +8,12 @@ import subprocess
 import hashlib
 
 passwords = {
-        "self": "123456"
+        "self": "123456",
+        'testbox': 'us7Oingohf6opa8ighip0eiF3AiPee6baiJoivuM4eisheojuu'
         }
 
-sshs = [] # 'IPs'
-reverse_ports = [9000:9100]
+sshs = ['172.16.16.1']
+reverse_ports = range(9000, 9500)
 
 
 def checker(*kwargs):
@@ -27,11 +28,11 @@ def real_checker(host, port, flag, team):
         return {'status': 'down', 'msg': 'wrong launch UI'}
     user = 'admin'
     pwd = passwords[team]
-    reverse_host = random.choise(sshs)
+    reverse_host = random.choice(sshs)
     reverse_port = random.choice(reverse_ports)
     target = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20))
     ws = websocket.create_connection("ws://" + host + ":" + str(port) + "/missle")
-    reverse_proxy =subprocess.Popen("ssh -R 9999:localhost:" + str(reverse_port) + " root@" + reverse_host)
+    reverse_proxy = subprocess.Popen(["ssh",  "-qn", "-R", str(reverse_port) + ":localhost:9999", "root@" + reverse_host],  stdout=open(subprocess.os.devnull, 'w'), stderr=open(subprocess.os.devnull, 'w'))
     sshd = os.popen("./missle_sshd.erl " + flag, "r", 1)
     assert sshd.readline().strip() == 'ready'
     ws.send(json.dumps(
@@ -73,4 +74,4 @@ def real_checker(host, port, flag, team):
 
 
 if __name__ == "__main__":
-    print checker("127.0.0.1", 20001, "9999", "self")
+    print checker("172.16.16.1", 20001, "9999", "testbox")
