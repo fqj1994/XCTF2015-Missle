@@ -1,7 +1,7 @@
 {application, xctf_missle, [
 	{description, ""},
 	{vsn, "0.1.0"},
-	{id, "cfe9351-dirty"},
+	{id, "8ce9c57-dirty"},
 	{modules, ['conf','txt_log','ws_missle','xctf_missle_app','xctf_missle_sup']},
 	{registered, []},
 	{applications, [
