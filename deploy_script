@@ -3,6 +3,13 @@ pacman -U erlang-17.5-1-x86_64.pkg.tar.xz
 cp -r xctf_missle /home/missle/
 chown -R ctf:ctf /home/missle/xctf_missle
 sudo -u ctf "cd /home/missle/xctf_missle && make"
+if [[ "$1" == "update" ]]; then
+    sudo -u missle "killall -9 heart beam.smp"
+    sudo -u missle "cd /home/missle/xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release start"
+    sudo -u missle "cd /home/missle/xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release ping"
+    exit
+    echo 'Update source success'
+fi
 systemctl start mysqld
 ROOTPWD=$(pwgen 50 | head -n 1)
 ADMINPWD=$(pwgen 50 | head -n 1)
@@ -20,3 +27,4 @@ mysql -uroot < set.sql
 systemctl restart mysqld
 sudo -u missle "cd /home/missle/xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release start"
 sudo -u missle "cd /home/missle/xctf_missle; sudo -u missle _rel/xctf_missle_release/bin/xctf_missle_release ping"
+echo 'Deploy success'
