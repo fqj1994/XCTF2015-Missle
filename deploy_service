@@ -25,7 +25,8 @@ insert into missles.users values('admin', '$ADMINPWDSHA');
 create user 'missles'@'localhost';
 grant select on missles.users to 'missles'@'localhost';
 " > set.sql
-echo $ROOTPWD $ADMINPWD > passwords
+echo $ROOTPWD $ADMINPWD > /root/xctf_missle_passwords
+chmod 600 /root/xctf_missle_passwords
 mysql -uroot < set.sql
 systemctl restart mysqld
 sudo -u ctf mkdir /home/missle/xctf_missle/_rel/xctf_missle_release/log
