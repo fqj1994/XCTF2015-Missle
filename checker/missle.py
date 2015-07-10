@@ -15,7 +15,7 @@ passwords = {
         }
 
 for i in range(len(teams)):
-    password_of_team = os.popen("ssh root@172.16." + str(i + 1) + ".1 cat /root/service/missle/passwords | awk {'print $2'}").read().strip()
+    password_of_team = os.popen("ssh root@172.16." + str(i + 1) + ".1 cat /root/service/missle/deploy/passwords | awk {'print $2'}").read().strip()
     assert len(password_of_team) > 0
     passwords[teams[i]] = password_of_team
 
