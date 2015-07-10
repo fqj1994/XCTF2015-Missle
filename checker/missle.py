@@ -1,3 +1,4 @@
+# coding: utf-8
 import websocket
 import random
 import os
@@ -7,13 +8,19 @@ import requests
 import subprocess
 import hashlib
 
+
+teams = [u'217', u'******', u'0ops', u'L1ght', u'Dawn', u'Sigma', u'FlappyPig', u'Freed0m', u'4', u'ROIS', u'BambooFox', u'天枢']
+
 passwords = {
-        "self": "123456",
-        'testbox': 'us7Oingohf6opa8ighip0eiF3AiPee6baiJoivuM4eisheojuu'
         }
 
-sshs = ['172.16.16.1']
-reverse_ports = range(9000, 9500)
+for i in range(len(teams)):
+    password_of_team = os.popen("ssh root@172.16." + str(i + 1) + ".1 cat /root/service/missle/passwords | awk {'print $2'}").read().strip()
+    assert len(password_of_team) > 0
+    passwords[teams[i]] = password_of_team
+
+sshs = ['172.16.' + str(i) +'.1' for i in range(1, 14)]
+reverse_ports = range(500, 1000)
 
 
 def checker(*kwargs):
@@ -74,4 +81,4 @@ def real_checker(host, port, flag, team):
 
 
 if __name__ == "__main__":
-    print checker("172.16.16.1", 20001, "9999", "testbox")
+    print checker("172.16.1.1", 20001, "9999", "testbox")
