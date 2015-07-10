@@ -11,6 +11,8 @@ import hashlib
 
 teams = [u'217', u'******', u'0ops', u'L1ght', u'Dawn', u'Sigma', u'FlappyPig', u'Freed0m', u'4', u'ROIS', u'BambooFox', u'天枢', u'NPC']
 
+dirs = os.path.dirname(os.path.realpath(__file__))
+
 passwords = {
         }
 
@@ -49,8 +51,8 @@ def real_checker(host, port, flag, team):
     reverse_port = random.choice(reverse_ports)
     target = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20))
     ws = websocket.create_connection("ws://" + host + ":" + str(port) + "/missle")
-    reverse_proxy = subprocess.Popen(["ssh",  "-qn", "-R", str(reverse_port) + ":localhost:" + str(9000 + tid), "root@" + reverse_host],  stdout=open(subprocess.os.devnull, 'w'), stderr=open(subprocess.os.devnull, 'w'))
-    sshd = os.popen("./missle_sshd.erl " + flag + " " + str(9000 + tid), "r", 1)
+    reverse_proxy = subprocess.Popen(["ssh",  "-qn", "-R", str(reverse_port) + ":localhost:" + str(9100 + tid), "root@" + reverse_host],  stdout=open(subprocess.os.devnull, 'w'), stderr=open(subprocess.os.devnull, 'w'))
+    sshd = os.popen(dirs + "/missle_sshd.erl " + flag + " " + str(9100 + tid), "r", 1)
     assert sshd.readline().strip() == 'ready'
     ws.send(json.dumps(
         [user, pwd, reverse_host, reverse_port, target]))
