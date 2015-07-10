@@ -11,9 +11,6 @@ import hashlib
 
 teams = [u'217', u'******', u'0ops', u'L1ght', u'Dawn', u'Sigma', u'FlappyPig', u'Freed0m', u'4', u'ROIS', u'BambooFox', u'天枢', u'NPC']
 
-os.system('mkdir /tmp/ssh_daemon')
-os.system('yes | ssh-keygen -t rsa -f /tmp/ssh_daemon/ssh_host_rsa_key')
-
 passwords = {
         }
 
