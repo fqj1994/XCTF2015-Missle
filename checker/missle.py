@@ -14,10 +14,17 @@ teams = [u'217', u'******', u'0ops', u'L1ght', u'Dawn', u'Sigma', u'FlappyPig', 
 passwords = {
         }
 
-for i in range(len(teams)):
-    password_of_team = os.popen("ssh root@172.16." + str(i + 1) + ".1 cat /root/xctf_missle_passwords | awk {'print $2'}").read().strip()
-    assert len(password_of_team) > 0
-    passwords[teams[i]] = password_of_team
+def get_password_of_team(team):
+    if team in passwords:
+        return True
+    try:
+        i = teams.index(team)
+        password_of_team = os.popen("ssh root@172.16." + str(i + 1) + ".1 cat /root/xctf_missle_passwords | awk {'print $2'}").read().strip()
+        assert len(password_of_team) > 0
+        passwords[teams[i]] = password_of_team
+        return True
+    except Exception as e:
+        return False 
 
 sshs = ['172.16.' + str(i) +'.1' for i in range(1, 14)]
 reverse_ports = range(500, 1000)
@@ -31,6 +38,8 @@ def checker(*kwargs):
 
 
 def real_checker(host, port, flag, team):
+    if not get_password_of_team(team):
+        return {'status': 'error', 'msg': 'cannot get admin password.'}
     if hashlib.sha1(requests.get("http://" + host + ":" + str(port) + "/").text).hexdigest() != 'c303b8b8ab604d882dc90127e9a8b1a0cc310f9c':
         return {'status': 'down', 'msg': 'wrong launch UI'}
     user = 'admin'
