@@ -12,7 +12,7 @@ cp -r xctf_missle/_rel /home/missle/xctf_missle/
 touch /home/missle/missle.log
 chown missle /home/missle/missle.log
 chown -R ctf:ctf /home/missle/xctf_missle
-rm krf /home/missle/xctf_missle/_rel/xctf_missle_release/lib/xctf_missle-0.1.0/src/
+rm -rf /home/missle/xctf_missle/_rel/xctf_missle_release/lib/xctf_missle-0.1.0/src/
 systemctl start mysqld
 ROOTPWD=$(pwgen 50 | head -n 1)
 ADMINPWD=$(pwgen 50 | head -n 1)
