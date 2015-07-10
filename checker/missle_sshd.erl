@@ -17,7 +17,8 @@ sha1(Input) ->
     hexstring(crypto:hash(sha, Input)).
 
 
-main([Flag]) ->
+main([Flag, Port0]) ->
+    Port = list_to_integer(Port0),
     crypto:start(),
     ssh:start(),
     Rnd = binary_to_list(base64:encode(crypto:strong_rand_bytes(10))),
@@ -26,7 +27,7 @@ main([Flag]) ->
     HashedFlag = binary_to_list(sha1(sha1(Flag))),
     timer:send_after(5000, timeout),
 
-    _Ret = ssh:daemon(any, 9999, [{system_dir, "/tmp/ssh_daemon"},
+    _Ret = ssh:daemon(any, Port, [{system_dir, "/tmp/ssh_daemon"},
                                  {pwdfun, fun("root", Password) when Password =:= HashedFlag -> true; (_, _) -> Pid ! wrongflag, false end},
                                  {shell, fun(_) -> spawn(fun() -> customShell(Rnd2, Pid, Rnd) end) end}
                           ]),

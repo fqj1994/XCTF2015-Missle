@@ -42,14 +42,15 @@ def real_checker(host, port, flag, team):
         return {'status': 'error', 'msg': 'cannot get admin password.'}
     if hashlib.sha1(requests.get("http://" + host + ":" + str(port) + "/").text).hexdigest() != 'c303b8b8ab604d882dc90127e9a8b1a0cc310f9c':
         return {'status': 'down', 'msg': 'wrong launch UI'}
+    tid = teams.index(team)
     user = 'admin'
     pwd = passwords[team]
     reverse_host = random.choice(sshs)
     reverse_port = random.choice(reverse_ports)
     target = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(20))
     ws = websocket.create_connection("ws://" + host + ":" + str(port) + "/missle")
-    reverse_proxy = subprocess.Popen(["ssh",  "-qn", "-R", str(reverse_port) + ":localhost:9999", "root@" + reverse_host],  stdout=open(subprocess.os.devnull, 'w'), stderr=open(subprocess.os.devnull, 'w'))
-    sshd = os.popen("./missle_sshd.erl " + flag, "r", 1)
+    reverse_proxy = subprocess.Popen(["ssh",  "-qn", "-R", str(reverse_port) + ":localhost:" + str(9000 + tid), "root@" + reverse_host],  stdout=open(subprocess.os.devnull, 'w'), stderr=open(subprocess.os.devnull, 'w'))
+    sshd = os.popen("./missle_sshd.erl " + flag + " " + str(9000 + tid), "r", 1)
     assert sshd.readline().strip() == 'ready'
     ws.send(json.dumps(
         [user, pwd, reverse_host, reverse_port, target]))
@@ -90,4 +91,4 @@ def real_checker(host, port, flag, team):
 
 
 if __name__ == "__main__":
-    print checker("172.16.1.1", 20001, "9999", "testbox")
+    print checker("172.16.3.1", 20001, "9999", "0ops")
